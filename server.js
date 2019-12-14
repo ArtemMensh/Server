@@ -9,16 +9,20 @@ var quer
 
 app.listen(port,() => console.log(`Example app listening on port ${port}!`))
 app.use(function(request, respons, next){
-	quer = request.query
-	type_request = quer.type_request
+	query = request.query
+	type_request = query.type_request
 	switch(type_request)
 	{
 		case "get_names" :
-			respons.send(GetNames(quer.words))
+			respons.send(GetNames(query.words))
 			break 
 		case "get_condition" :
-			respons.send(GetCondition(quer.name))
+			respons.send(GetCondition(query.name))
 			break
+		case "get_drug" :
+			respons.send(GetDrug(query.name, query.condition))
+			break
+
 	}
 	
 })
@@ -29,18 +33,44 @@ function GetNames(word){
 	for(key in data)
 	{
 		if(key.startsWith(word[0].toUpperCase() + word.substr(1).toLowerCase()))
-			str += key+","
+			str += key+"\n"
 	}
-	str = str.slice(0,str.length -1)
 	
 	return  str
 }
 
 function GetCondition(name) {
-	
+
+	name = name.replace(/[_]/g," ")	
+	var prep = data[name]
+	var str = ''
+
+	for(var i in prep)
+	{
+		if(prep[i].FormRelease != null){
+			str+=prep[i].FormRelease 
+		}
+	}
+
+	return str
+}
+
+function GetDrug(name,condition) 
+{
+	name = name.replace(/[_]/g," ")
+	condition = condition.replace(/[_]/g," ")
+
+
+
 	var prep = data[name]
 
-	console.log(prep)
+	for(var i in prep)
+	{
+		if(prep[i].FormRelease === condition+'\n')
+		{
+			return JSON.stringify(prep[i])
+		}
+	} 
 
-	return prep
+	return "Error"
 }
