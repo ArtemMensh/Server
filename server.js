@@ -8,6 +8,7 @@ request1 = "http://localhost:3000/"
 var quer
 
 app.listen(port,() => console.log(`Example app listening on port ${port}!`))
+
 app.use(function(request, respons, next){
 	query = request.query
 	type_request = query.type_request
@@ -21,6 +22,9 @@ app.use(function(request, respons, next){
 			break
 		case "get_drug" :
 			respons.send(GetDrug(query.name, query.condition))
+			break
+		case "get_chemistryName" :
+			respons.send(GetChemistryName(query.name))
 			break
 
 	}
@@ -60,8 +64,6 @@ function GetDrug(name,condition)
 	name = name.replace(/[_]/g," ")
 	condition = condition.replace(/[_]/g," ")
 
-
-
 	var prep = data[name]
 
 	for(var i in prep)
@@ -73,4 +75,11 @@ function GetDrug(name,condition)
 	} 
 
 	return "Error"
+}
+
+function GetChemistryName(name){
+	
+	name = name.replace(/[_]/g," ")
+	console.log(data[name])
+	return data[name][0].ChemistryName
 }

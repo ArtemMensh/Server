@@ -29,7 +29,7 @@ type_request
 		http://localhost:3000/?type_request=get_condition&name=Парацетамол
 	Вернет все состояния в которых может быть это лекарство
 
-=get_drug
+= get_drug
 	Возвращает всю информацию по интересующему препарату, в указанном состоянии
 	Параметры:
 		name - имя препарата
@@ -38,4 +38,10 @@ type_request
 	Пример запроса
 		http://localhost:3000/?type_request=get_drug&name=Парацетамол&condition=суппозитории_ректальные_250_мг,_упаковки_ячейковые_контурные_-_1 
 
+= get_chemistryName
+	Возвращает название действующего вещества препарата
+	Параметры:
+		name - имя препарата
 
+	Пример запроса 
+		http://localhost:3000/?type_request=get_chemistryName&name=Парацетамол
