@@ -40,7 +40,7 @@ function GetNames(word){
 			str += key+"\n"
 	}
 	
-	return  str
+	return  str.substring(0, str.length - 1)
 }
 
 function GetCondition(name) {
@@ -56,7 +56,7 @@ function GetCondition(name) {
 		}
 	}
 
-	return str
+	return str.substring(0, str.length - 1)
 }
 
 function GetDrug(name,condition) 
