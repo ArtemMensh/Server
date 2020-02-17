@@ -45,3 +45,11 @@ type_request
 
 	Пример запроса 
 		http://localhost:3000/?type_request=get_chemistryName&name=Парацетамол
+
+= get_Generics
+	Возвращает название препаратов с действующим веществом равным параметру chemistryName
+	Параметры:
+		chemistryName - имя действующего вещества
+
+	Пример запроса 
+		http://localhost:3000/?type_request=get_Generics&chemistryName=Пентоксифиллин

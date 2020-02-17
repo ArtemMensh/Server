@@ -26,6 +26,9 @@ app.use(function(request, respons, next){
 		case "get_chemistryName" :
 			respons.send(GetChemistryName(query.name))
 			break
+		case "get_Generics" :
+			respons.send(GetGenerics(query.chemistryName))
+			break
 
 	}
 	
@@ -83,3 +86,22 @@ function GetChemistryName(name){
 	console.log(data[name])
 	return data[name][0].ChemistryName
 }
+
+function GetGenerics(chemistryName){
+	var req = ""
+	for(var prep in data){
+		for(var i in data[prep]){
+			if(data[prep][i].ChemistryName == chemistryName){
+				req+=data[prep][i].TradeName+","
+				break
+			}
+		}		
+	}
+	return req.substring(0, req.length - 1)
+
+}
+
+
+
+
+
