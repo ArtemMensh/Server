@@ -64,6 +64,7 @@ function GetCondition(name) {
 
 function GetDrug(name,condition) 
 {
+	var qrt = ""
 	name = name.replace(/[_]/g," ")
 	condition = condition.replace(/[_]/g," ")
 
@@ -73,11 +74,11 @@ function GetDrug(name,condition)
 	{
 		if(prep[i].FormRelease === condition+'\n')
 		{
-			return JSON.stringify(prep[i])
+			qrt+= JSON.stringify(prep[i])
 		}
 	} 
 
-	return "Error"
+	return qrt
 }
 
 function GetChemistryName(name){
