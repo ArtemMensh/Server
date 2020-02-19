@@ -10,6 +10,7 @@ var quer
 app.listen(port,() => console.log(`Example app listening on port ${port}!`))
 
 app.use(function(request, respons, next){
+	console.log("Conect")
 	query = request.query
 	type_request = query.type_request
 	switch(type_request)
@@ -26,10 +27,12 @@ app.use(function(request, respons, next){
 		case "get_chemistryName" :
 			respons.send(GetChemistryName(query.name))
 			break
-		case "get_Generics" :
+		case "get_generics" :
 			respons.send(GetGenerics(query.chemistryName))
 			break
-
+		case "get_generics_with_condition":
+			respons.send(GetGenericsWithCondiyion(query.chemistryName, query.condition))
+			break
 	}
 	
 })
@@ -103,6 +106,20 @@ function GetGenerics(chemistryName){
 }
 
 
-
+function GetGenericsWithCondiyion(chemistryName, condition){
+	var array = []
+ 	
+	for(var prep in data){
+		for(var i in data[prep]){
+			if(data[prep][i].ChemistryName == chemistryName){
+				if(data[prep][i].FormRelease  == condition + "\n"){
+					array.push(data[prep][i])
+				}
+			}
+		}		
+	}
+	console.log(array)
+	return JSON.stringify(array)
+}
 
 
