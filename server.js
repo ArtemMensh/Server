@@ -1,4 +1,5 @@
-const data = require("./newMedicaments.json")
+const data = require("./TradeNameMedicaments.json")
+const chemistry = require("./ChemistryNameMedicaments.json")
 const r = require("request")
 const express = require('express')
 const app = express()
@@ -50,7 +51,7 @@ function GetNames(word){
 }
 
 function GetCondition(name) {
-
+	console.log(name)
 	name = name.replace(/[_]/g," ")	
 	var prep = data[name]
 	var str = ''
@@ -93,33 +94,56 @@ function GetChemistryName(name){
 
 function GetGenerics(chemistryName){
 	var req = ""
-	for(var prep in data){
-		for(var i in data[prep]){
-			if(data[prep][i].ChemistryName == chemistryName){
-				req+=data[prep][i].TradeName+","
-				break
-			}
-		}		
+	for(var prep in chemistry[chemistryName])
+	{
+		req+=chemistry[chemistryName][prep].TradeName+","
 	}
+	// for(var prep in data){
+	// 	for(var i in data[prep]){
+	// 		if(data[prep][i].ChemistryName == chemistryName){
+	// 			req+=data[prep][i].TradeName+","
+	// 			break
+	// 		}
+	// 	}		
+	// }
 	return req.substring(0, req.length - 1)
 
 }
 
 
 function GetGenericsWithCondiyion(chemistryName, condition){
-	var array = []
+	// var array = []
  	
-	for(var prep in data){
-		for(var i in data[prep]){
-			if(data[prep][i].ChemistryName == chemistryName){
-				if(data[prep][i].FormRelease  == condition + "\n"){
-					array.push(data[prep][i])
-				}
-			}
-		}		
+	// for(var prep in data){
+	// 	for(var i in data[prep]){
+	// 		if(data[prep][i].ChemistryName == chemistryName){
+	// 			if(data[prep][i].FormRelease  == condition + "\n"){
+	// 				array.push(data[prep][i])
+	// 			}
+	// 		}
+	// 	}		
+	// }
+	// console.log(array)
+	// return JSON.stringify(array)
+
+	var req = ""
+	console.log(condition)
+	for(var prep in chemistry[chemistryName])
+	{
+		if (chemistry[chemistryName][prep].FormRelease == condition+ "\n")
+		{
+			req+=chemistry[chemistryName][prep].TradeName+","
+		}
 	}
-	console.log(array)
-	return JSON.stringify(array)
+	// for(var prep in data){
+	// 	for(var i in data[prep]){
+	// 		if(data[prep][i].ChemistryName == chemistryName){
+	// 			req+=data[prep][i].TradeName+","
+	// 			break
+	// 		}
+	// 	}		
+	// }
+	return req.substring(0, req.length - 1)
 }
 
 

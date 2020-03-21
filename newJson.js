@@ -2,11 +2,12 @@ var data = require("./Medicaments.json")
 fs=require("fs")
 
 
-newMedicament()
+TradeNameMedicaments()
+ChemistryNameMedicaments()
 testJSON()
 
 
-function newMedicament(){
+function TradeNameMedicaments(){
 	var count = 0 
 	var newData = {}
 
@@ -24,7 +25,28 @@ function newMedicament(){
 		count++
 	}
 
-	fs.writeFileSync("newMedicaments.json", JSON.stringify(newData, null, 2))
+	fs.writeFileSync("TradeNameMedicaments.json", JSON.stringify(newData, null, 2))
+}
+
+function ChemistryNameMedicaments(){
+	var count = 0 
+	var newData = {}
+
+	for(var i = 0; i<data.length; i++)
+	{
+		if(data[i].ChemistryName == '~') continue 
+		name = data[i].ChemistryName
+		try{
+			newData[name][newData[name].length] = data[i]
+		}
+		catch(err){
+			newData[name] = []
+			newData[name][newData[name].length] = data[i]
+		}
+		count++
+	}
+
+	fs.writeFileSync("ChemistryNameMedicaments.json", JSON.stringify(newData, null, 2))
 }
 
 function testJSON() {
