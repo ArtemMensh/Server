@@ -81,10 +81,15 @@ def findPreparat(namePreparat, prep):
 
             try:
                 # Открываем список аптек
+
                 el = newBrowser.find_elements_by_xpath(
                     "//a[@id='os_pharm_link']")
                 if len(el) == 0:
                     return True
+
+                WebDriverWait(newBrowser, 60).until(
+                    EC.element_to_be_clickable((By.XPATH, "//a[@id='os_pharm_link']")))
+
                 el[0].click()
             except ValueError:
                 print(ValueError)
