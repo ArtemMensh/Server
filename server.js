@@ -6,13 +6,12 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-request1 = "http://localhost:3000/"
+request1 = "http://94.140.248.170:1488/"
 var quer
 
-app.listen(port,() => console.log(`Example app listening on port ${port}!`))
+app.listen(1488,() => console.log(`Example app listening on port ${port}!`))
 
 app.use(function(request, respons, next){
-	console.log("Conect")
 	query = request.query
 	type_request = query.type_request
 	switch(type_request)
