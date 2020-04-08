@@ -1,5 +1,6 @@
 const data = require("./TradeNameMedicaments.json")
 const chemistry = require("./ChemistryNameMedicaments.json")
+const fs = require('fs')
 const r = require("request")
 const express = require('express')
 const app = express()
@@ -39,36 +40,35 @@ app.use(function(request, respons, next){
 })
 	
 function GetNames(word){
-	var str = ''
+	var str = {}
 
 	for(key in data)
 	{
 		if(key.startsWith(word[0].toUpperCase() + word.substr(1).toLowerCase()))
-			str += key+"\n"
+			str[key] = {}
 	}
 	
-	return  str.substring(0, str.length - 1)
+	return  JSON.stringify(str, null, 2)
 }
 
 function GetCondition(name) {
-	console.log(name)
 	name = name.replace(/[_]/g," ")	
 	var prep = data[name]
-	var str = ''
+	var str = {}
 
 	for(var i in prep)
 	{
 		if(prep[i].FormRelease != null){
-			str+=prep[i].FormRelease 
+			str[prep[i].FormRelease] = {}
 		}
 	}
 
-	return str.substring(0, str.length - 1)
+	return JSON.stringify(str, null, 2)
 }
 
 function GetDrug(name,condition) 
 {
-	var qrt = ""
+	var array = []
 	name = name.replace(/[_]/g," ")
 	condition = condition.replace(/[_]/g," ")
 
@@ -78,72 +78,52 @@ function GetDrug(name,condition)
 	{
 		if(prep[i].FormRelease === condition+'\n')
 		{
-			qrt+= JSON.stringify(prep[i])
+			array.push(JSON.stringify(prep[i], null, 2))
 		}
 	} 
 
-	return qrt
+	return JSON.stringify({array}, null, 2)
 }
 
-function GetChemistryName(name){
-	
+function GetChemistryName(name)
+{
 	name = name.replace(/[_]/g," ")
-	console.log(data[name])
-	return data[name][0].ChemistryName
+	var d = {}
+	d[data[name][0].ChemistryName] = {}
+	return JSON.stringify(d, null, 2)
 }
 
-function GetGenerics(chemistryName){
-	var req = ""
+function GetGenerics(chemistryName)
+{
+	var req = {}
 	for(var prep in chemistry[chemistryName])
 	{
-		req+=chemistry[chemistryName][prep].TradeName+","
+		try
+		{
+			var file = require("./Parser/Info/"+[chemistry[chemistryName][prep].TradeName]+".json")
+			req[chemistry[chemistryName][prep].TradeName] = file
+		}
+		catch(e)
+		{
+			req[chemistry[chemistryName][prep].TradeName] = {}
+		}
 	}
-	// for(var prep in data){
-	// 	for(var i in data[prep]){
-	// 		if(data[prep][i].ChemistryName == chemistryName){
-	// 			req+=data[prep][i].TradeName+","
-	// 			break
-	// 		}
-	// 	}		
-	// }
-	return req.substring(0, req.length - 1)
-
+	
+	return JSON.stringify(req, null, 2)
 }
 
 
-function GetGenericsWithCondiyion(chemistryName, condition){
-	// var array = []
- 	
-	// for(var prep in data){
-	// 	for(var i in data[prep]){
-	// 		if(data[prep][i].ChemistryName == chemistryName){
-	// 			if(data[prep][i].FormRelease  == condition + "\n"){
-	// 				array.push(data[prep][i])
-	// 			}
-	// 		}
-	// 	}		
-	// }
-	// console.log(array)
-	// return JSON.stringify(array)
-
-	var req = ""
-	console.log(condition)
+function GetGenericsWithCondiyion(chemistryName, condition)
+{
+	var req = {}
 	for(var prep in chemistry[chemistryName])
 	{
 		if (chemistry[chemistryName][prep].FormRelease == condition+ "\n")
 		{
-			req+=chemistry[chemistryName][prep].TradeName+","
+			req[chemistry[chemistryName][prep].TradeName] = {}
 		}
 	}
-	// for(var prep in data){
-	// 	for(var i in data[prep]){
-	// 		if(data[prep][i].ChemistryName == chemistryName){
-	// 			req+=data[prep][i].TradeName+","
-	// 			break
-	// 		}
-	// 	}		
-	// }
-	return req.substring(0, req.length - 1)
+	return JSON.stringify(req, null, 2)
 }
 
 

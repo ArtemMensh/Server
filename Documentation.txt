@@ -1,8 +1,5 @@
 Запрос
 
-Сплитить ответ по символу '\n'. Пример: request.split('\n')
-Если в параметр запроса нужно передать словосочетание, то пробелы следует заменить на нижнее подчеркивание _
-
 Основа запроса 
 http://localhost:3000/
 далее следует параметр какого типа запрос. 
@@ -10,15 +7,19 @@ http://localhost:3000/
 
 type_request
 = get_names
-	возвращает список имен начинающихся с трех букв
-
-	эти буквы передаются следующим параметром 
+	буквы передаются следующим параметром 
 	words = 'asd'
 
 	Так запрос 
 	http://localhost:3000/?type_request=get_names&words=Пар
 
 	Вернет все названия лекарств начинающихся на Пар
+	В формате json
+	{
+		name1:{},
+		name2:{},
+		...
+	}
 
 = get_condition
 	возвращает в каких состояниях есть это лекарство
@@ -28,6 +29,12 @@ type_request
 	Так запрос 
 		http://localhost:3000/?type_request=get_condition&name=Парацетамол
 	Вернет все состояния в которых может быть это лекарство
+	В формате json
+	{
+		condition1:{},
+		condition2:{},
+		...
+	}
 
 = get_drug
 	Возвращает всю информацию по интересующему препарату, в указанном состоянии
@@ -36,7 +43,17 @@ type_request
 		condition - состояние
 
 	Пример запроса
-		http://localhost:3000/?type_request=get_drug&name=Парацетамол&condition=суппозитории_ректальные_250_мг,_упаковки_ячейковые_контурные_-_1 
+		http://localhost:3000/?type_request=get_drug&name=Парацетамол&condition=суппозитории_ректальные_250_мг,_упаковки_ячейковые_контурные_-_1
+
+	В формате json
+	{
+		array:[
+			{
+				infomation
+			},
+			...
+		]
+	} 
 
 = get_chemistryName
 	Возвращает название действующего вещества препарата
@@ -45,14 +62,35 @@ type_request
 
 	Пример запроса 
 		http://localhost:3000/?type_request=get_chemistryName&name=Парацетамол
+	В формате json
+	{
+		ChemistryName:{}
+	}
 
 = get_generics
-	Возвращает название препаратов с действующим веществом равным параметру chemistryName
+	Возвращает название препаратов с действующим веществом равным параметру chemistryName, а так же все результаты поиска на сайте lecopttorg.ru
 	Параметры:
 		chemistryName - имя действующего вещества
 
 	Пример запроса 
 		http://localhost:3000/?type_request=get_generics&chemistryName=Пентоксифиллин
+	В формате json
+	{
+		name:
+		{
+			name:{
+				srcImg: "",
+				price: "",
+				location:
+					[
+						location1,
+						location2,
+						...
+					]
+			}
+		},
+		...
+	}
 
 = get_generics_with_condition
 	Возвращает название препаратов с действующим веществом равным параметру chemistryName и в состоянии равному condition

@@ -175,4 +175,30 @@ def start():
                 break
 
 
-start()
+def startTest():
+        # загружаем все названия препаратов
+    with open("./TradeNameForTestParsing.json", "r", encoding='utf-8') as read_file:
+        data = json.load(read_file)
+
+    # проходим по каждому названию и запускаем парсер
+    for name in data:
+        print(name)
+        if not os.path.exists("Info/" + name + ".json"):
+            prep = dict()
+            if findPreparat(name, prep):
+                    # сохраняем информацию по препарату
+                with open("Info/" + name + ".json", "w", encoding='utf-8') as write_file:
+                    json.dump(prep, write_file, ensure_ascii=False, indent=2)
+                    write_file.close()
+            else:
+                with open("Error.txt", "r", encoding='utf-8') as read_file:
+                    allError = read_file
+                    read_file.close()
+                allError += name + "\n"
+                with open("Error.txt", "w", encoding='utf-8') as write_file:
+                    write_file.write(allError)
+                    write_file.close()
+
+
+# start()
+startTest()
